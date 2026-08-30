@@ -649,7 +649,7 @@
       `).join('');
     }
 
-    // ─── 📊 방문자 유입 및 클릭 통계 전송 ───
+    // ─── 📊 방문자 유입 및 클릭 통계 전송 (GitHub Pages & 로컬 겸용) ───
     function trackVisit() {
       try {
         const urlParams = new URLSearchParams(window.location.search);
@@ -661,21 +661,36 @@
           else if (referrer.includes('naver')) source = 'blog';
           else source = 'direct';
         }
+
+        // 1. 로컬 개발 환경 통신
         fetch('/api/analytics/visit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ source })
         }).catch(() => {});
+
+        // 2. 깃허브 페이지 글로벌 통계 집계 (무료 클라우드 카운터)
+        fetch('https://countapi.mileshilliard.com/api/v1/hit/bindoongnam_total_visits').catch(() => {});
+        if (source) {
+          fetch(`https://countapi.mileshilliard.com/api/v1/hit/bindoongnam_src_${source}`).catch(() => {});
+        }
       } catch (e) {}
     }
 
     function trackClick(productId) {
       try {
+        // 1. 로컬 개발 환경 통신
         fetch('/api/analytics/click', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ productId })
         }).catch(() => {});
+
+        // 2. 깃허브 페이지 글로벌 통계 집계
+        fetch('https://countapi.mileshilliard.com/api/v1/hit/bindoongnam_total_clicks').catch(() => {});
+        if (productId) {
+          fetch(`https://countapi.mileshilliard.com/api/v1/hit/bindoongnam_prod_${productId}`).catch(() => {});
+        }
       } catch (e) {}
     }
 
