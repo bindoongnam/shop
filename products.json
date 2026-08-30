@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "id": "prod_1788083317092",
+    "name": "Apple 2026 맥미니",
+    "category": "tablet_mini",
+    "categories": [
+      "tablet_mini"
+    ],
+    "benefits": [
+      "rocket",
+      "coupang_cash"
+    ],
+    "badge": "특가 핫딜",
+    "originalPrice": "1,499,000",
+    "price": "1,454,030",
+    "discount": "3%",
+    "desc": "실시간 최저가 혜택! 조기 품절될 수 있습니다.",
+    "image": "https://ads-partners.coupang.com/image1/xO9HnAc4jtJpNJ3oxAHBFMdiBCvqPM9JtwI1PDeu2J-7mBOV707mQzdIdo4IizOLvSspbcPJrdODmkUZ9evPhD03YN_S4fFRsHtQrao_OuHElsa-M4zO8WTucXGk9lIIv2EoLhLn2UFJezWqHDYPo4u-BTkp5wFOoYx8ZBZc5sb5poaMP5Jta_3oFkQSptNJtDZuWIqxI3k-x_zKxXWXXdinW7NkO4mH4jwktYANyqMYWyZhSfys_N6Bc2942KpCPbudwUAxHO1w18fELvyt8NPa8ODC06IrkaOInoPD_pkoHk1C81s=",
+    "platform": "coupang",
+    "platformName": "쿠팡 로켓",
+    "affiliateUrl": "https://link.coupang.com/a/gDpR256LDM",
+    "updatedAt": "2026-08-30"
+  }
+]
