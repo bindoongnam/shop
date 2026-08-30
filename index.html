@@ -433,24 +433,6 @@
     }
 
     /* 최하단 플로팅 최저가 갱신 상태 뱃지 */
-    .footer-bar {
-      padding: 10px 16px;
-      background: var(--surface2);
-      border-top: 1px solid var(--border);
-      font-size: 11.5px;
-      color: var(--text-sub);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .live-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: #10b981;
-      display: inline-block;
-      margin-right: 4px;
-      box-shadow: 0 0 8px #10b981;
-    }
   </style>
 </head>
 <body>
@@ -471,15 +453,18 @@
         <a href="https://instagram.com" target="_blank" class="social-btn">📸 인스타</a>
         <a href="https://blog.naver.com/rhkd92-" target="_blank" class="social-btn">📝 블로그</a>
       </div>
+      <div style="margin-top: 12px; font-size: 11.5px; color: #94a3b8; line-height: 1.4; background: rgba(255, 255, 255, 0.04); padding: 8px 14px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08); text-align: center;">
+        🙏 링크를 통해 구매해주시면 채널 운영에 큰 힘이 됩니다. 감사합니다!
+      </div>
     </header>
 
-    <!-- 카테고리 4열 그리드 네비게이션 (2줄 8칸) -->
+    <!-- 카테고리 4열 그리드 네비게이션 (2줄 8칸 완벽 비율) -->
     <div class="cat-grid-wrapper">
       <div class="cat-grid">
         <div class="cat-btn active" onclick="filterCategory('all', this)">🔥 전체핫딜</div>
-        <div class="cat-btn" onclick="filterCategory('storage', this)">💾 저장장치</div>
-        <div class="cat-btn" onclick="filterCategory('pc', this)">🖥️ PC부품</div>
-        <div class="cat-btn" onclick="filterCategory('charger', this)">🔌 충전제품</div>
+        <div class="cat-btn" onclick="filterCategory('pc_storage', this)">🖥️ PC부품/저장</div>
+        <div class="cat-btn" onclick="filterCategory('monitor', this)" style="color:#38bdf8; font-weight:800;">🖥️ 모니터</div>
+        <div class="cat-btn" onclick="filterCategory('deskterior', this)">💡 데스크테리어/충전</div>
         <div class="cat-btn" onclick="filterCategory('keyboard_mouse', this)">⌨️ 키보드/마우스</div>
         <div class="cat-btn" onclick="filterCategory('tablet_mini', this)">📱 태블릿/미니PC</div>
         <div class="cat-btn" onclick="filterCategory('laptop', this)">💻 노트북</div>
@@ -508,12 +493,6 @@
         </div>
       </section>
 
-    </div>
-
-    <!-- 하단 실시간 갱신 상태 -->
-    <div class="footer-bar">
-      <div><span class="live-dot"></span> <span id="lastUpdatedTime">실시간 가격 반영 중</span></div>
-      <div>⚡ 100% 최저가 보증 링크</div>
     </div>
 
     <!-- 공정위 필수 법적 표기 (계정 안전 보호) -->
@@ -609,9 +588,9 @@
 
       const catNames = {
         all: '🔥 전체 핫딜',
-        storage: '💾 저장장치 (SSD/외장하드)',
-        pc: '🖥️ PC 부품 (RAM/글카 등)',
-        charger: '🔌 충전제품 / 멀티포트',
+        pc_storage: '🖥️ PC부품 / 저장장치(SSD)',
+        monitor: '🖥️ 모니터 (게이밍/고화질)',
+        deskterior: '💡 데스크테리어 / 충전제품',
         keyboard_mouse: '⌨️ 키보드 / 마우스',
         tablet_mini: '📱 태블릿 / 미니PC',
         laptop: '💻 노트북',
@@ -632,8 +611,20 @@
             </div>
           </div>
           <div class="card-body">
-            <div class="card-name" title="${item.name}">${item.name}</div>
-            
+            <!-- 혜택 및 배송 뱃지 표시 -->
+            ${Array.isArray(item.benefits) && item.benefits.length > 0 ? `
+              <div style="display:flex; flex-wrap:wrap; gap:4px; margin-bottom:6px;">
+                ${item.benefits.map(b => {
+                  if (b === 'n_delivery') return '<span style="font-size:10px; font-weight:800; padding:1px 5px; border-radius:4px; background:#03c75a; color:#fff; display:inline-flex; align-items:center; gap:2px;">🟢 N배송</span>';
+                  if (b === 'rocket') return '<span style="font-size:10px; font-weight:800; padding:1px 5px; border-radius:4px; background:#3b82f6; color:#fff; display:inline-flex; align-items:center; gap:2px;">🚀 로켓배송</span>';
+                  if (b === 'naver_point') return '<span style="font-size:10px; font-weight:800; padding:1px 5px; border-radius:4px; background:rgba(3,199,90,0.15); color:#4ade80; border:1px solid rgba(3,199,90,0.3);">🎁 N포인트</span>';
+                  if (b === 'coupang_cash') return '<span style="font-size:10px; font-weight:800; padding:1px 5px; border-radius:4px; background:rgba(239,68,68,0.15); color:#fca5a5; border:1px solid rgba(239,68,68,0.3);">💰 쿠팡캐시</span>';
+                  if (b === 'free_shipping') return '<span style="font-size:10px; font-weight:800; padding:1px 5px; border-radius:4px; background:rgba(245,158,11,0.15); color:#fcd34d; border:1px solid rgba(245,158,11,0.3);">📦 무료배송</span>';
+                  return '';
+                }).join('')}
+              </div>
+            ` : ''}
+
             <!-- 원가, 할인율, 최종 할인가 3단 구성 -->
             <div class="card-price-box" style="margin-bottom:8px;">
               ${item.originalPrice && item.originalPrice !== item.price ? `
