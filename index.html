@@ -409,13 +409,14 @@
     .card-name {
       font-size: 13px;
       font-weight: 700;
-      line-height: 1.35;
-      margin-bottom: 4px;
+      line-height: 1.4;
+      color: #ffffff;
+      margin-bottom: 6px;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      height: 35px;
+      min-height: 36px;
     }
     .card-price-row {
       margin-bottom: 8px;
@@ -559,7 +560,13 @@
       }
 
       let filtered = allProducts.slice();
-      if (cat !== 'all') {
+      if (cat === 'all') {
+        // '전체핫딜' 탭: 사용자가 'hotdeal'을 체크한 상품들만 모아서 노출 (체크된 게 없으면 전체 기본 노출)
+        const hotdealOnly = filtered.filter(p => Array.isArray(p.categories) && p.categories.includes('hotdeal'));
+        if (hotdealOnly.length > 0) {
+          filtered = hotdealOnly;
+        }
+      } else {
         filtered = filtered.filter(p => {
           if (Array.isArray(p.categories)) {
             return p.categories.includes(cat);
@@ -606,28 +613,37 @@
       
       grid.innerHTML = filtered.map(item => `
         <div class="card">
+          <!-- 1. 카드 맨 위: [광고] 제휴 고지 문구 -->
+          <div style="background: rgba(0, 0, 0, 0.4); padding: 8px 12px; border-bottom: 1px solid var(--border); font-size: 10.5px; color: #cbd5e1; line-height: 1.35; text-align: center;">
+            ${getAdNotice(item.platform)}
+          </div>
+
+          <!-- 2. 제품 사진 -->
           <div class="card-img-wrap">
             <img src="${item.image}" alt="${item.name}" class="card-img" onerror="this.src='https://images.unsplash.com/photo-1562976540-1502c2145186?w=500'">
             <span class="card-badge">${item.badge || item.platformName}</span>
-            <div class="card-ad-sticker">
-              ${getAdNotice(item.platform)}
-            </div>
           </div>
+
+          <!-- 3. 사진 바로 아래 검은 띠: 제품명 -->
+          <div style="background: rgba(0, 0, 0, 0.85); padding: 10px 12px 8px; border-top: 1px solid rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.08);">
+            <h3 class="card-name" style="color: #ffffff; font-size: 13.5px; font-weight: 700; margin: 0; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" title="${item.name}">${item.name}</h3>
+          </div>
+
+          <!-- 4. 카드 하단: 혜택 뱃지, 가격 및 구매 버튼 -->
           <div class="card-body">
-            <!-- 혜택 및 배송 뱃지 표시 -->
+            <!-- 원래대로 들어간 혜택 및 배송 뱃지 -->
             ${Array.isArray(item.benefits) && item.benefits.length > 0 ? `
-              <div style="display:flex; flex-wrap:wrap; gap:4px; margin-bottom:6px;">
+              <div style="display:flex; flex-wrap:wrap; gap:4px; margin-bottom:8px;">
                 ${item.benefits.map(b => {
-                  if (b === 'n_delivery') return '<span style="font-size:10px; font-weight:800; padding:1px 5px; border-radius:4px; background:#03c75a; color:#fff; display:inline-flex; align-items:center; gap:2px;">🟢 N배송</span>';
-                  if (b === 'rocket') return '<span style="font-size:10px; font-weight:800; padding:1px 5px; border-radius:4px; background:#3b82f6; color:#fff; display:inline-flex; align-items:center; gap:2px;">🚀 로켓배송</span>';
-                  if (b === 'naver_point') return '<span style="font-size:10px; font-weight:800; padding:1px 5px; border-radius:4px; background:rgba(3,199,90,0.15); color:#4ade80; border:1px solid rgba(3,199,90,0.3);">🎁 N포인트</span>';
-                  if (b === 'coupang_cash') return '<span style="font-size:10px; font-weight:800; padding:1px 5px; border-radius:4px; background:rgba(239,68,68,0.15); color:#fca5a5; border:1px solid rgba(239,68,68,0.3);">💰 쿠팡캐시</span>';
-                  if (b === 'free_shipping') return '<span style="font-size:10px; font-weight:800; padding:1px 5px; border-radius:4px; background:rgba(245,158,11,0.15); color:#fcd34d; border:1px solid rgba(245,158,11,0.3);">📦 무료배송</span>';
+                  if (b === 'n_delivery') return '<span style="font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px; background:#03c75a; color:#fff; display:inline-flex; align-items:center; gap:2px;">🟢 N배송</span>';
+                  if (b === 'rocket') return '<span style="font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px; background:#3b82f6; color:#fff; display:inline-flex; align-items:center; gap:2px;">🚀 로켓배송</span>';
+                  if (b === 'naver_point') return '<span style="font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px; background:rgba(3,199,90,0.15); color:#4ade80; border:1px solid rgba(3,199,90,0.3);">🎁 N포인트</span>';
+                  if (b === 'coupang_cash') return '<span style="font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px; background:rgba(239,68,68,0.15); color:#fca5a5; border:1px solid rgba(239,68,68,0.3);">💰 쿠팡캐시</span>';
+                  if (b === 'free_shipping') return '<span style="font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px; background:rgba(245,158,11,0.15); color:#fcd34d; border:1px solid rgba(245,158,11,0.3);">📦 무료배송</span>';
                   return '';
                 }).join('')}
               </div>
             ` : ''}
-
             <!-- 원가, 할인율, 최종 할인가 3단 구성 -->
             <div class="card-price-box" style="margin-bottom:8px;">
               ${item.originalPrice && item.originalPrice !== item.price ? `
@@ -653,6 +669,14 @@
     function trackVisit() {
       try {
         const urlParams = new URLSearchParams(window.location.search);
+        
+        // 🛡️ 빈둥님(관리자) 본인 방문은 통계에서 완벽 제외!
+        if (urlParams.get('admin') === 'true' || localStorage.getItem('is_shop_admin') === 'true') {
+          localStorage.setItem('is_shop_admin', 'true');
+          console.log('👑 관리자 접속: 방문자 집계에서 제외되었습니다.');
+          return;
+        }
+
         let source = urlParams.get('utm') || urlParams.get('ref') || '';
         if (!source) {
           const referrer = document.referrer.toLowerCase();
