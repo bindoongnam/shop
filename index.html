@@ -445,7 +445,9 @@
     
     <!-- 프로필 영역 -->
     <header class="header">
-      <div class="profile-avatar">💻</div>
+      <div class="profile-avatar" style="padding:0; overflow:hidden; border: 2.5px solid #38bdf8; box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);">
+        <img src="profile.jpg" alt="빈둥남 프로필" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.innerHTML='💻'">
+      </div>
       <div class="profile-name">
         빈둥남 PICK <span class="badge-verified">✓ 공식</span>
       </div>
@@ -462,17 +464,33 @@
       </div>
     </header>
 
-    <!-- 카테고리 4열 그리드 네비게이션 (2줄 8칸 완벽 비율) -->
+    <!-- 카테고리 4열 그리드 네비게이션 (2줄 8칸 완벽 비율 + 실시간 상품수 뱃지) -->
     <div class="cat-grid-wrapper">
       <div class="cat-grid">
-        <div class="cat-btn active" onclick="filterCategory('all', this)">🔥 전체핫딜</div>
-        <div class="cat-btn" onclick="filterCategory('pc_storage', this)">🖥️ PC부품/저장</div>
-        <div class="cat-btn" onclick="filterCategory('monitor', this)" style="color:#38bdf8; font-weight:800;">🖥️ 모니터</div>
-        <div class="cat-btn" onclick="filterCategory('deskterior', this)">💡 데스크테리어/충전</div>
-        <div class="cat-btn" onclick="filterCategory('keyboard_mouse', this)">⌨️ 키보드/마우스</div>
-        <div class="cat-btn" onclick="filterCategory('tablet_mini', this)">📱 태블릿/미니PC</div>
-        <div class="cat-btn" onclick="filterCategory('laptop', this)">💻 노트북</div>
-        <div class="cat-btn" onclick="filterCategory('snack_life', this)" style="color:#f59e0b; font-weight:800;">☕ 간식/생필품</div>
+        <div class="cat-btn active" onclick="filterCategory('all', this)">
+          🔥 전체핫딜 <span id="mCountAll" style="font-size:10px; margin-left:3px; opacity:0.85;">(0)</span>
+        </div>
+        <div class="cat-btn" onclick="filterCategory('pc_storage', this)">
+          🖥️ PC/저장 <span id="mCountPc" style="font-size:10px; margin-left:3px; opacity:0.85;">(0)</span>
+        </div>
+        <div class="cat-btn" onclick="filterCategory('monitor', this)" style="color:#38bdf8; font-weight:800;">
+          🖥️ 모니터 <span id="mCountMonitor" style="font-size:10px; margin-left:3px; opacity:0.85;">(0)</span>
+        </div>
+        <div class="cat-btn" onclick="filterCategory('deskterior', this)">
+          💡 데스크/충전 <span id="mCountDesk" style="font-size:10px; margin-left:3px; opacity:0.85;">(0)</span>
+        </div>
+        <div class="cat-btn" onclick="filterCategory('keyboard_mouse', this)">
+          ⌨️ 키/마 <span id="mCountKm" style="font-size:10px; margin-left:3px; opacity:0.85;">(0)</span>
+        </div>
+        <div class="cat-btn" onclick="filterCategory('tablet_mini', this)">
+          📱 태블릿/미니 <span id="mCountTablet" style="font-size:10px; margin-left:3px; opacity:0.85;">(0)</span>
+        </div>
+        <div class="cat-btn" onclick="filterCategory('laptop', this)">
+          💻 노트북 <span id="mCountLaptop" style="font-size:10px; margin-left:3px; opacity:0.85;">(0)</span>
+        </div>
+        <div class="cat-btn" onclick="filterCategory('snack_life', this)" style="color:#f59e0b; font-weight:800;">
+          ☕ 간식/생필품 <span id="mCountSnack" style="font-size:10px; margin-left:3px; opacity:0.85;">(0)</span>
+        </div>
       </div>
     </div>
 
@@ -522,6 +540,41 @@
     }
 
     function renderShop() {
+      // 카테고리별 실시간 등록 상품 수 계산
+      const counts = {
+        all: 0,
+        pc_storage: 0,
+        monitor: 0,
+        deskterior: 0,
+        keyboard_mouse: 0,
+        tablet_mini: 0,
+        laptop: 0,
+        snack_life: 0
+      };
+
+      allProducts.forEach(p => {
+        const cats = Array.isArray(p.categories) ? p.categories : (p.category ? [p.category] : []);
+        // 전체핫딜에 체크된 상품이 있으면 그 수만큼, 없으면 전체 상품수
+        if (cats.includes('hotdeal')) counts.all++;
+        cats.forEach(c => {
+          if (counts[c] !== undefined && c !== 'all') counts[c]++;
+        });
+      });
+
+      // 핫딜 체크된 게 없으면 전체 상품수를 기본 표시
+      if (counts.all === 0 && allProducts.length > 0) {
+        counts.all = allProducts.length;
+      }
+
+      if (document.getElementById('mCountAll')) document.getElementById('mCountAll').textContent = `(${counts.all})`;
+      if (document.getElementById('mCountPc')) document.getElementById('mCountPc').textContent = `(${counts.pc_storage})`;
+      if (document.getElementById('mCountMonitor')) document.getElementById('mCountMonitor').textContent = `(${counts.monitor})`;
+      if (document.getElementById('mCountDesk')) document.getElementById('mCountDesk').textContent = `(${counts.deskterior})`;
+      if (document.getElementById('mCountKm')) document.getElementById('mCountKm').textContent = `(${counts.keyboard_mouse})`;
+      if (document.getElementById('mCountTablet')) document.getElementById('mCountTablet').textContent = `(${counts.tablet_mini})`;
+      if (document.getElementById('mCountLaptop')) document.getElementById('mCountLaptop').textContent = `(${counts.laptop})`;
+      if (document.getElementById('mCountSnack')) document.getElementById('mCountSnack').textContent = `(${counts.snack_life})`;
+
       // 일반 목록 렌더링
       filterCategory(currentCat);
     }
