@@ -468,28 +468,31 @@
     <div class="cat-grid-wrapper">
       <div class="cat-grid">
         <div class="cat-btn active" onclick="filterCategory('all', this)">
-          🔥 전체핫딜 <span id="mCountAll" style="font-size:10px; margin-left:3px; opacity:0.85;">(0)</span>
+          🔥 전체핫딜 <span id="mCountAll" style="font-size:10px; margin-left:2px; opacity:0.85;">(0)</span>
         </div>
         <div class="cat-btn" onclick="filterCategory('pc_storage', this)">
-          🖥️ PC/저장 <span id="mCountPc" style="font-size:10px; margin-left:3px; opacity:0.85;">(0)</span>
+          🖥️ PC부품/저장 <span id="mCountPc" style="font-size:10px; margin-left:2px; opacity:0.85;">(0)</span>
         </div>
         <div class="cat-btn" onclick="filterCategory('monitor', this)" style="color:#38bdf8; font-weight:800;">
-          🖥️ 모니터 <span id="mCountMonitor" style="font-size:10px; margin-left:3px; opacity:0.85;">(0)</span>
+          🖥️ 모니터 <span id="mCountMonitor" style="font-size:10px; margin-left:2px; opacity:0.85;">(0)</span>
         </div>
         <div class="cat-btn" onclick="filterCategory('deskterior', this)">
-          💡 데스크/충전 <span id="mCountDesk" style="font-size:10px; margin-left:3px; opacity:0.85;">(0)</span>
+          💡 데스크테리어/충전 <span id="mCountDesk" style="font-size:10px; margin-left:2px; opacity:0.85;">(0)</span>
         </div>
         <div class="cat-btn" onclick="filterCategory('keyboard_mouse', this)">
-          ⌨️ 키/마 <span id="mCountKm" style="font-size:10px; margin-left:3px; opacity:0.85;">(0)</span>
+          ⌨️ 키보드/마우스 <span id="mCountKm" style="font-size:10px; margin-left:2px; opacity:0.85;">(0)</span>
+        </div>
+        <div class="cat-btn" onclick="filterCategory('audio_earphone', this)" style="color:#a855f7; font-weight:800;">
+          🎧 음향/이어폰 <span id="mCountAudio" style="font-size:10px; margin-left:2px; opacity:0.85;">(0)</span>
         </div>
         <div class="cat-btn" onclick="filterCategory('tablet_mini', this)">
-          📱 태블릿/미니 <span id="mCountTablet" style="font-size:10px; margin-left:3px; opacity:0.85;">(0)</span>
+          📱 태블릿/미니PC <span id="mCountTablet" style="font-size:10px; margin-left:2px; opacity:0.85;">(0)</span>
         </div>
         <div class="cat-btn" onclick="filterCategory('laptop', this)">
-          💻 노트북 <span id="mCountLaptop" style="font-size:10px; margin-left:3px; opacity:0.85;">(0)</span>
+          💻 노트북 <span id="mCountLaptop" style="font-size:10px; margin-left:2px; opacity:0.85;">(0)</span>
         </div>
         <div class="cat-btn" onclick="filterCategory('snack_life', this)" style="color:#f59e0b; font-weight:800;">
-          ☕ 간식/생필품 <span id="mCountSnack" style="font-size:10px; margin-left:3px; opacity:0.85;">(0)</span>
+          ☕ 간식/생필품 <span id="mCountSnack" style="font-size:10px; margin-left:2px; opacity:0.85;">(0)</span>
         </div>
       </div>
     </div>
@@ -547,6 +550,7 @@
         monitor: 0,
         deskterior: 0,
         keyboard_mouse: 0,
+        audio_earphone: 0,
         tablet_mini: 0,
         laptop: 0,
         snack_life: 0
@@ -571,6 +575,7 @@
       if (document.getElementById('mCountMonitor')) document.getElementById('mCountMonitor').textContent = `(${counts.monitor})`;
       if (document.getElementById('mCountDesk')) document.getElementById('mCountDesk').textContent = `(${counts.deskterior})`;
       if (document.getElementById('mCountKm')) document.getElementById('mCountKm').textContent = `(${counts.keyboard_mouse})`;
+      if (document.getElementById('mCountAudio')) document.getElementById('mCountAudio').textContent = `(${counts.audio_earphone})`;
       if (document.getElementById('mCountTablet')) document.getElementById('mCountTablet').textContent = `(${counts.tablet_mini})`;
       if (document.getElementById('mCountLaptop')) document.getElementById('mCountLaptop').textContent = `(${counts.laptop})`;
       if (document.getElementById('mCountSnack')) document.getElementById('mCountSnack').textContent = `(${counts.snack_life})`;
@@ -655,6 +660,7 @@
         monitor: '🖥️ 모니터 (게이밍/고화질)',
         deskterior: '💡 데스크테리어 / 충전제품',
         keyboard_mouse: '⌨️ 키보드 / 마우스',
+        audio_earphone: '🎧 스피커 / 이어폰 / 음향',
         tablet_mini: '📱 태블릿 / 미니PC',
         laptop: '💻 노트북',
         snack_life: '☕ 데스크 간식 & 자취 생필품'
