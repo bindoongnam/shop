@@ -128,43 +128,55 @@
       transform: translateY(-1px);
     }
 
-    /* 카테고리 4열 x 2줄 그리드 메뉴 */
+    /* 카테고리 가로 스와이프 필(Pill) 네비게이션 (모바일 100% 최적화) */
     .cat-grid-wrapper {
-      padding: 12px 14px;
+      padding: 10px 0;
       background: rgba(17, 24, 39, 0.95);
       border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(10px);
     }
     .cat-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      display: flex;
       gap: 8px;
+      overflow-x: auto;
+      padding: 2px 16px;
+      scrollbar-width: none; /* 파이어폭스 */
+      -ms-overflow-style: none; /* IE/엣지 */
+      -webkit-overflow-scrolling: touch; /* iOS 부드러운 스크롤 */
+    }
+    .cat-grid::-webkit-scrollbar {
+      display: none; /* 크롬/사파리/모바일 스크롤바 숨김 */
     }
     .cat-btn {
-      padding: 8px 4px;
-      border-radius: 10px;
-      font-size: 11.5px;
+      padding: 8px 14px;
+      border-radius: 24px;
+      font-size: 12.5px;
       font-weight: 700;
       text-align: center;
       cursor: pointer;
       color: var(--text-sub);
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--border);
-      transition: all 0.2s;
-      display: flex;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.2s ease;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       white-space: nowrap;
+      flex-shrink: 0;
       user-select: none;
     }
     .cat-btn:hover {
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.1);
       color: var(--text);
     }
     .cat-btn.active {
-      background: var(--primary);
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
       color: #fff;
-      border-color: var(--primary);
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+      border-color: #3b82f6;
+      box-shadow: 0 3px 12px rgba(59, 130, 246, 0.4);
     }
     .sort-btn {
       background: rgba(255, 255, 255, 0.05);
@@ -729,10 +741,14 @@
       try {
         const urlParams = new URLSearchParams(window.location.search);
         
-        // 🛡️ 빈둥님(관리자) 본인 방문은 통계에서 완벽 제외!
-        if (urlParams.get('admin') === 'true' || localStorage.getItem('is_shop_admin') === 'true') {
+        // 🛡️ 빈둥님(관리자) 본인 방문 및 로컬 테스트(localhost)는 통계에서 완벽 제외!
+        const isLocalhost = window.location.hostname === 'localhost' || 
+                            window.location.hostname === '127.0.0.1' || 
+                            window.location.protocol === 'file:';
+
+        if (isLocalhost || urlParams.get('admin') === 'true' || localStorage.getItem('is_shop_admin') === 'true') {
           localStorage.setItem('is_shop_admin', 'true');
-          console.log('👑 관리자 접속: 방문자 집계에서 제외되었습니다.');
+          console.log('👑 관리자/로컬 접속: 방문자 집계에서 영구 제외되었습니다.');
           return;
         }
 
