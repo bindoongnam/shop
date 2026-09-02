@@ -466,6 +466,15 @@
       </div>
     </header>
 
+    <!-- 🔍 실시간 테크 특가 검색창 -->
+    <div style="padding: 12px 16px 6px; max-width: 600px; margin: 0 auto;">
+      <div style="display: flex; align-items: center; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; padding: 10px 14px; gap: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.25);">
+        <span style="font-size: 15px;">🔍</span>
+        <input type="text" id="techSearchInput" placeholder="찾으시는 특가템 검색 (SSD, 모니터, 충전기, 미니PC...)" style="border: none; background: transparent; outline: none; width: 100%; font-size: 13px; color: #fff;">
+        <button id="techSearchClear" onclick="clearTechSearch()" style="display:none; background:transparent; border:none; color:#94a3b8; font-size:14px; cursor:pointer;">✕</button>
+      </div>
+    </div>
+
     <!-- 카테고리 4열 그리드 네비게이션 (2줄 8칸 완벽 비율 + 실시간 상품수 뱃지) -->
     <div class="cat-grid-wrapper">
       <div class="cat-grid">
@@ -602,6 +611,16 @@
     }
 
     let currentSort = 'hot'; // 'hot' | 'discount' | 'latest'
+    let searchQuery = '';
+
+    function clearTechSearch() {
+      const inp = document.getElementById('techSearchInput');
+      if (inp) inp.value = '';
+      const clr = document.getElementById('techSearchClear');
+      if (clr) clr.style.display = 'none';
+      searchQuery = '';
+      filterCategory(currentCat);
+    }
 
     function changeSort(sortMode) {
       currentSort = sortMode;
@@ -633,6 +652,16 @@
           }
           return p.category === cat;
         });
+      }
+
+      // 🔍 실시간 검색어 필터링
+      if (searchQuery.trim()) {
+        const q = searchQuery.trim().toLowerCase();
+        filtered = filtered.filter(p => 
+          (p.name && p.name.toLowerCase().includes(q)) || 
+          (Array.isArray(p.features) && p.features.some(f => f.toLowerCase().includes(q))) ||
+          (p.desc && p.desc.toLowerCase().includes(q))
+        );
       }
 
       // 정렬 처리: 인기순(클릭순), 할인율순(%), 최신순
@@ -671,6 +700,17 @@
       document.getElementById('listTitle').textContent = catNames[cat] || '📦 특가 목록';
       document.getElementById('itemCount').textContent = `${filtered.length}개`;
       const grid = document.getElementById('productGrid');
+      
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div style="text-align:center; padding:60px 20px; color:#94a3b8; grid-column: 1 / -1;">
+            <div style="font-size:38px; margin-bottom:10px;">🔍</div>
+            <div style="font-size:15px; font-weight:800; color:#fff;">일치하는 특가 상품이 없습니다.</div>
+            <div style="font-size:12px; margin-top:4px; color:#64748b;">다른 검색어를 입력하시거나 카테고리 탭을 눌러보세요!</div>
+          </div>
+        `;
+        return;
+      }
       
       grid.innerHTML = filtered.map(item => `
         <div class="card">
@@ -781,6 +821,17 @@
           fetch(`https://countapi.mileshilliard.com/api/v1/hit/bindoongnam_prod_${productId}`).catch(() => {});
         }
       } catch (e) {}
+    }
+
+    // 🔍 실시간 검색어 입력 이벤트 연동
+    const techSearchInput = document.getElementById('techSearchInput');
+    if (techSearchInput) {
+      techSearchInput.addEventListener('input', (e) => {
+        searchQuery = e.target.value;
+        const clr = document.getElementById('techSearchClear');
+        if (clr) clr.style.display = searchQuery ? 'block' : 'none';
+        filterCategory(currentCat);
+      });
     }
 
     // 초기 실행
