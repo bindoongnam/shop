@@ -738,6 +738,8 @@
                 ${item.benefits.map(b => {
                   if (b === 'n_delivery') return '<span style="font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px; background:#03c75a; color:#fff; display:inline-flex; align-items:center; gap:2px;">🟢 N배송</span>';
                   if (b === 'rocket') return '<span style="font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px; background:#3b82f6; color:#fff; display:inline-flex; align-items:center; gap:2px;">🚀 로켓배송</span>';
+                  if (b === 'rocket_jikgu') return '<span style="font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px; background:#6366f1; color:#fff; display:inline-flex; align-items:center; gap:2px;">🚀 로켓직구</span>';
+                  if (b === 'global_jikgu') return '<span style="font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px; background:#0d9488; color:#fff; display:inline-flex; align-items:center; gap:2px;">✈️ 해외직구</span>';
                   if (b === 'naver_point') return '<span style="font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px; background:rgba(3,199,90,0.15); color:#4ade80; border:1px solid rgba(3,199,90,0.3);">🎁 N포인트</span>';
                   if (b === 'coupang_cash') return '<span style="font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px; background:rgba(239,68,68,0.15); color:#fca5a5; border:1px solid rgba(239,68,68,0.3);">💰 쿠팡캐시</span>';
                   if (b === 'free_shipping') return '<span style="font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px; background:rgba(245,158,11,0.15); color:#fcd34d; border:1px solid rgba(245,158,11,0.3);">📦 무료배송</span>';
