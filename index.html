@@ -479,7 +479,7 @@
     <div class="cat-grid-wrapper">
       <div class="cat-grid">
         <div class="cat-btn active" onclick="filterCategory('all', this)">
-          🔥 전체핫딜 <span id="mCountAll" style="font-size:10px; margin-left:2px; opacity:0.85;">(0)</span>
+          🔥 빈둥남 추천 <span id="mCountAll" style="font-size:10px; margin-left:2px; opacity:0.85;">(0)</span>
         </div>
         <div class="cat-btn" onclick="filterCategory('pc_storage', this)">
           🖥️ PC부품/저장 <span id="mCountPc" style="font-size:10px; margin-left:2px; opacity:0.85;">(0)</span>
@@ -569,17 +569,12 @@
 
       allProducts.forEach(p => {
         const cats = Array.isArray(p.categories) ? p.categories : (p.category ? [p.category] : []);
-        // 전체핫딜에 체크된 상품이 있으면 그 수만큼, 없으면 전체 상품수
+        // '빈둥남 추천'에 명시적으로 체크된 상품만 집계
         if (cats.includes('hotdeal')) counts.all++;
         cats.forEach(c => {
           if (counts[c] !== undefined && c !== 'all') counts[c]++;
         });
       });
-
-      // 핫딜 체크된 게 없으면 전체 상품수를 기본 표시
-      if (counts.all === 0 && allProducts.length > 0) {
-        counts.all = allProducts.length;
-      }
 
       if (document.getElementById('mCountAll')) document.getElementById('mCountAll').textContent = `(${counts.all})`;
       if (document.getElementById('mCountPc')) document.getElementById('mCountPc').textContent = `(${counts.pc_storage})`;
@@ -640,11 +635,8 @@
 
       let filtered = allProducts.slice();
       if (cat === 'all') {
-        // '전체핫딜' 탭: 사용자가 'hotdeal'을 체크한 상품들만 모아서 노출 (체크된 게 없으면 전체 기본 노출)
-        const hotdealOnly = filtered.filter(p => Array.isArray(p.categories) && p.categories.includes('hotdeal'));
-        if (hotdealOnly.length > 0) {
-          filtered = hotdealOnly;
-        }
+        // '빈둥남 추천' 탭: 사용자가 'hotdeal'을 명시적으로 체크한 상품만 엄선 노출! (선택 안 한 상품은 절대 노출 안 됨)
+        filtered = filtered.filter(p => Array.isArray(p.categories) && p.categories.includes('hotdeal'));
       } else {
         filtered = filtered.filter(p => {
           if (Array.isArray(p.categories)) {
@@ -686,7 +678,7 @@
       }
 
       const catNames = {
-        all: '🔥 전체 핫딜',
+        all: '🔥 빈둥남 추천',
         pc_storage: '🖥️ PC부품 / 저장장치(SSD)',
         monitor: '🖥️ 모니터 (게이밍/고화질)',
         deskterior: '💡 데스크테리어 / 충전제품',
